@@ -1,0 +1,3 @@
+C:/devel/c-vulkan-win32/build/CMakeFiles/c-vulkan-win32.dir
+C:/devel/c-vulkan-win32/build/CMakeFiles/edit_cache.dir
+C:/devel/c-vulkan-win32/build/CMakeFiles/rebuild_cache.dir
