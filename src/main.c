@@ -42,6 +42,7 @@ struct VkContext {
     u32 width;
     u32 height;
     VkInstance instance;
+    VkDebugUtilsMessengerEXT callback;
 };
 VkContext context;
 
@@ -71,11 +72,25 @@ void VkLoadProcs() {
 PFN_vkCreateDebugReportCallbackEXT vkCreateDebugReportCallbackEXT = NULL;
 PFN_vkDestroyDebugReportCallbackEXT vkDestroyDebugReportCallbackEXT = NULL;
 PFN_vkDebugReportMessageEXT vkDebugReportMessageEXT = NULL;
+PFN_vkCreateDebugUtilsMessengerEXT vkCreateDebugUtilsMessengerEXT;
 
 void VkLoadExtProcs(VkContext *context ) {
-    *(void **)&vkCreateDebugReportCallbackEXT = vkGetInstanceProcAddr(context->instance, "vkCreateDebugReportCallbackEXT" );
-    *(void **)&vkDestroyDebugReportCallbackEXT = vkGetInstanceProcAddr(context->instance, "vkDestroyDebugReportCallbackEXT" );
-    *(void **)&vkDebugReportMessageEXT = vkGetInstanceProcAddr(context->instance, "vkDebugReportMessageEXT" );
+    // *(void **)&vkCreateDebugReportCallbackEXT = vkGetInstanceProcAddr(context->instance, "vkCreateDebugReportCallbackEXT" );
+    // Assert(vkCreateDebugReportCallbackEXT != 0, "Failed to load vkCreateDebugReportCallbackEXT");
+    // *(void **)&vkDestroyDebugReportCallbackEXT = vkGetInstanceProcAddr(context->instance, "vkDestroyDebugReportCallbackEXT" );
+    // *(void **)&vkDebugReportMessageEXT = vkGetInstanceProcAddr(context->instance, "vkDebugReportMessageEXT" );
+    *(void **)&vkCreateDebugUtilsMessengerEXT = vkGetInstanceProcAddr(context->instance, "vkCreateDebugUtilsMessengerEXT");
+    Assert(vkCreateDebugUtilsMessengerEXT != 0, "Failed to load vkCreateDebugUtilsMessengerEXT");
+}
+
+VKAPI_ATTR VkBool32 VKAPI_CALL vkDebugReportCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageTypes, const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData, void *pUserData) {
+    OutputDebugStringA("Validation Layer: ");
+    // OutputDebugStringA(messageSeverity);
+    // OutputDebugStringA(" ");
+    // offsetof(VkDebugUtilsMessengerCallbackDataEXT, pMessage);
+    OutputDebugStringA(pCallbackData->pMessage);
+    OutputDebugStringA("\n");
+    return VK_FALSE;
 }
 
 //--------------------------------
@@ -112,27 +127,9 @@ int main(int argc, char *argv[]) {
 
     VkLoadProcs();
 
-    VkApplicationInfo app_info = { };
-    app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    app_info.pApplicationName = "CVulkanWin32";
-    app_info.engineVersion = 1;
-    app_info.apiVersion = VK_MAKE_VERSION(1, 0, 0);
-
-    VkInstanceCreateInfo instance_info = { };
-    instance_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-    instance_info.pApplicationInfo = &app_info;
-    instance_info.enabledLayerCount = 0;
-    instance_info.ppEnabledLayerNames = NULL;
-    instance_info.enabledExtensionCount = 0;
-    instance_info.ppEnabledExtensionNames = NULL;
-
     VkResult result = {};
 
-    result = vkCreateInstance(&instance_info, NULL, &context.instance);
-    VkAssert(result, "Failed to create Vulkan Instance.");
-
-    VkLoadExtProcs(&context);
-
+    // layers
     u32 layer_count = 0;
     result = vkEnumerateInstanceLayerProperties(&layer_count, NULL);
     VkAssert(result, "Failed to create Enumerate Instance Layer Properties.");
@@ -152,10 +149,9 @@ int main(int argc, char *argv[]) {
     Assert(found_validation, "Could not find validation layer.");
     const char *layers[] = { "VK_LAYER_KHRONOS_validation" };
 
-    instance_info.enabledLayerCount = 1;
-    instance_info.ppEnabledLayerNames = layers;
     arenaSetPos(&arena, pos);
 
+    // extensions
     u32 extension_count = 0;
     result = vkEnumerateInstanceExtensionProperties(NULL, &extension_count, NULL);
     VkAssert(result, "Error: vkEnumerateInstanceExtensionProperties failed!");
@@ -165,7 +161,7 @@ int main(int argc, char *argv[]) {
     result = vkEnumerateInstanceExtensionProperties(NULL, &extension_count, extensions_available);
     VkAssert(result, "Error: vkEnumerateInstanceExtensionProperties failed!");
 
-    const char *extensions[] = { "VK_KHR_surface", "VK_KHR_win32_surface", "VK_EXT_debug_report" };
+    const char *extensions[] = { VK_KHR_SURFACE_EXTENSION_NAME, VK_KHR_WIN32_SURFACE_EXTENSION_NAME, VK_EXT_DEBUG_UTILS_EXTENSION_NAME };
     u32 number_required_extensions = sizeofarray(extensions);
     u32 found_extensions = 0;
     for(u32 i = 0; i < extension_count; ++i) {
@@ -177,6 +173,39 @@ int main(int argc, char *argv[]) {
     }
     Assert(found_extensions == number_required_extensions, "Could not find debug extension");
     arenaSetPos(&arena, pos);
+
+    // instance
+    VkApplicationInfo app_info = { };
+    app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+    app_info.pApplicationName = "CVulkanWin32";
+    app_info.engineVersion = 1;
+    app_info.apiVersion = VK_MAKE_VERSION(1, 0, 0);
+
+    VkInstanceCreateInfo instance_info = { };
+    instance_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+    instance_info.pApplicationInfo = &app_info;
+    // validation layers & debug extensions
+    instance_info.ppEnabledExtensionNames = extensions;
+    instance_info.enabledExtensionCount = sizeofarray(extensions);
+    instance_info.ppEnabledLayerNames = layers;
+    instance_info.enabledLayerCount = sizeofarray(layers);
+
+    // debug
+    VkDebugUtilsMessengerCreateInfoEXT debug_callback_create_info = {};
+    debug_callback_create_info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+    debug_callback_create_info.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+    debug_callback_create_info.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+    debug_callback_create_info.pfnUserCallback = &vkDebugReportCallback;
+
+    instance_info.pNext  = (VkDebugUtilsMessengerCreateInfoEXT *)&debug_callback_create_info;
+
+    result = vkCreateInstance(&instance_info, NULL, &context.instance);
+    VkAssert(result, "Failed to create Vulkan Instance.");
+
+    VkLoadExtProcs(&context);
+
+    result = vkCreateDebugUtilsMessengerEXT(context.instance, &debug_callback_create_info, NULL, &context.callback);
+    VkAssert(result, "Failed to create debug report callback.");
 
     MSG msg;
     bool done = false;
