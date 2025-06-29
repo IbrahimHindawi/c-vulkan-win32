@@ -1,8 +1,0 @@
-[
-{
-  "directory": "C:/devel/c-vulkan-win32/build",
-  "command": "C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\MSVC\\1441~1.341\\bin\\Hostx64\\x64\\cl.exe  /nologo -IC:\\devel\\c-vulkan-win32\\extern\\haikal\\src\\meta_arena\\gen -IC:\\devel\\c-vulkan-win32\\extern\\saha\\src -IC:\\VulkanSDK\\1.4.313.0\\Include /DWIN32 /D_WINDOWS /W3 /MDd /Zi /Ob0 /Od /RTC1 /FoCMakeFiles\\c-vulkan-win32.dir\\src\\main.c.obj /FdCMakeFiles\\c-vulkan-win32.dir\\ /FS -c C:\\devel\\c-vulkan-win32\\src\\main.c",
-  "file": "C:\\devel\\c-vulkan-win32\\src\\main.c",
-  "output": "CMakeFiles\\c-vulkan-win32.dir\\src\\main.c.obj"
-}
-]
