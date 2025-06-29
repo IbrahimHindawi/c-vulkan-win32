@@ -63,8 +63,8 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "C:/devel/c-vulkan-win32/build/CMakeFiles/CMakeScratch/TryCompile-f7xsrp"
-      binary: "C:/devel/c-vulkan-win32/build/CMakeFiles/CMakeScratch/TryCompile-f7xsrp"
+      source: "C:/devel/c-vulkan-win32/build/CMakeFiles/CMakeScratch/TryCompile-v8m8qp"
+      binary: "C:/devel/c-vulkan-win32/build/CMakeFiles/CMakeScratch/TryCompile-v8m8qp"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /W3"
       CMAKE_C_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
@@ -73,11 +73,11 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'C:/devel/c-vulkan-win32/build/CMakeFiles/CMakeScratch/TryCompile-f7xsrp'
+        Change Dir: 'C:/devel/c-vulkan-win32/build/CMakeFiles/CMakeScratch/TryCompile-v8m8qp'
         
-        Run Build Command(s): C:/devel/ninja/ninja.exe -v cmTC_e4d55
-        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\MSVC\\1441~1.341\\bin\\Hostx64\\x64\\cl.exe  /nologo   /DWIN32 /D_WINDOWS /W3  /MDd /Zi /Ob0 /Od /RTC1 /showIncludes /FoCMakeFiles\\cmTC_e4d55.dir\\CMakeCCompilerABI.c.obj /FdCMakeFiles\\cmTC_e4d55.dir\\ /FS -c "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCCompilerABI.c"
-        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && "C:\\Program Files\\CMake\\bin\\cmake.exe" -E vs_link_exe --msvc-ver=1941 --intdir=CMakeFiles\\cmTC_e4d55.dir --rc=C:\\PROGRA~2\\WI3CF2~1\\10\\bin\\100226~1.0\\x64\\rc.exe --mt=C:\\PROGRA~2\\WI3CF2~1\\10\\bin\\100226~1.0\\x64\\mt.exe --manifests  -- C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\MSVC\\1441~1.341\\bin\\Hostx64\\x64\\link.exe /nologo CMakeFiles\\cmTC_e4d55.dir\\CMakeCCompilerABI.c.obj  /out:cmTC_e4d55.exe /implib:cmTC_e4d55.lib /pdb:cmTC_e4d55.pdb /version:0.0 /machine:x64  /debug /INCREMENTAL /subsystem:console  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib && cd ."
+        Run Build Command(s): C:/devel/ninja/ninja.exe -v cmTC_586d1
+        [1/2] C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\MSVC\\1441~1.341\\bin\\Hostx64\\x64\\cl.exe  /nologo   /DWIN32 /D_WINDOWS /W3  /MDd /Zi /Ob0 /Od /RTC1 /showIncludes /FoCMakeFiles\\cmTC_586d1.dir\\CMakeCCompilerABI.c.obj /FdCMakeFiles\\cmTC_586d1.dir\\ /FS -c "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCCompilerABI.c"
+        [2/2] C:\\Windows\\system32\\cmd.exe /C "cd . && "C:\\Program Files\\CMake\\bin\\cmake.exe" -E vs_link_exe --msvc-ver=1941 --intdir=CMakeFiles\\cmTC_586d1.dir --rc=C:\\PROGRA~2\\WI3CF2~1\\10\\bin\\100226~1.0\\x64\\rc.exe --mt=C:\\PROGRA~2\\WI3CF2~1\\10\\bin\\100226~1.0\\x64\\mt.exe --manifests  -- C:\\PROGRA~1\\MIB055~1\\2022\\COMMUN~1\\VC\\Tools\\MSVC\\1441~1.341\\bin\\Hostx64\\x64\\link.exe /nologo CMakeFiles\\cmTC_586d1.dir\\CMakeCCompilerABI.c.obj  /out:cmTC_586d1.exe /implib:cmTC_586d1.lib /pdb:cmTC_586d1.pdb /version:0.0 /machine:x64  /debug /INCREMENTAL /subsystem:console  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib && cd ."
         
       exitCode: 0
   -
